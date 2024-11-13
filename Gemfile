@@ -65,3 +65,5 @@ end
 gem "httparty", "~> 0.22.0"
 
 gem "sublayer", "~> 0.2.8"
+
+gem "dotenv", "~> 3.1"
