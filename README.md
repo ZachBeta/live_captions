@@ -1,4 +1,5 @@
 # done
+* rails new and share the github
 
 # now
 * replicate voice recording from
