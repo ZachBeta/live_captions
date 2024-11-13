@@ -18,7 +18,8 @@ https://github.com/sublayerapp/rails_llm_voice_chat_example/blob/main/lib/sublay
 
 
 # soon
-
+* deploy somewhere so it can be shared
+  * probably just heroku, mabye someone can help with kamal
 
 
 
