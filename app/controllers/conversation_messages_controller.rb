@@ -1,19 +1,18 @@
 require "tempfile"
-require "pry"
 require "json"
 
 class ConversationMessagesController < ApplicationController
   def clear
     session[:conversation_context] = nil
 
-    render json: {message: "Conversation context cleared"}
+    render json: { message: "Conversation context cleared" }
   end
 
   def create
     conversation = Conversation.find(params[:conversation_id])
 
     # Convert conversational context to an easy to use format
-    conversational_context = conversation.messages.map { |message| {role: message.role, content: message.content} }
+    conversational_context = conversation.messages.map { |message| { role: message.role, content: message.content } }
 
     # Convert audio data to text
     text = Sublayer::Actions::SpeechToTextAction.new(params[:audio_data]).call
