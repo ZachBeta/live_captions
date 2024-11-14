@@ -12,7 +12,7 @@ class ConversationMessagesController < ApplicationController
     conversation = Conversation.find(params[:conversation_id])
 
     # Convert conversational context to an easy to use format
-    conversational_context = conversation.messages.map { |message| { role: message.role, content: message.content } }
+    # conversational_context = conversation.messages.map { |message| { role: message.role, content: message.content } }
 
     # Convert audio data to text
     text = Sublayer::Actions::SpeechToTextAction.new(params[:audio_data]).call
