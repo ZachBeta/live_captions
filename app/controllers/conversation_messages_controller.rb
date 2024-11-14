@@ -16,17 +16,17 @@ class ConversationMessagesController < ApplicationController
 
     # Convert audio data to text
     text = Sublayer::Actions::SpeechToTextAction.new(params[:audio_data]).call
+    conversation.messages << Message.new(conversation: conversation, role: "user", content: text)
 
     # Generate conversational response
-    output_text = Sublayer::Generators::ConversationalResponseGenerator.new(conversation_context: conversational_context, latest_request: text).generate
+    # TODO: turn this "response" into a translation somehow
+    # output_text = Sublayer::Generators::ConversationalResponseGenerator.new(conversation_context: conversational_context, latest_request: text).generate
+    # conversation.messages << Message.new(conversation: conversation, role: "assistant", content: output_text)
 
-    # Convert text to audio data
-    speech = Sublayer::Actions::TextToSpeechAction.new(output_text).call
+    # TODO: this should have some better handling
+    conversation.save!
 
-    # Store conversation context for next message
-    conversation.messages << Message.new(conversation: conversation, role: "user", content: text)
-    conversation.messages << Message.new(conversation: conversation, role: "assistant", content: output_text)
-
-    send_data speech, type: "audio/wav", disposition: "inline"
+    # push the conversations to the client with hotwire
+    render turbo_stream: turbo_stream.replace("conversation-messages", partial: "conversations/messages", locals: { conversation: conversation })
   end
 end
