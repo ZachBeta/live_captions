@@ -37,16 +37,19 @@ export default class extends Controller {
       body: formData,
       headers: {
         'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-        'Accept': 'application/json',
+        'Accept': 'text/vnd.turbo-stream.html',
       },
     })
-    .then(response => response.blob())
-      .then(audioBlob => {
-        const audioUrl = URL.createObjectURL(audioBlob)
-        const audio = new Audio(audioUrl)
-        audio.play()
-        this.statusTarget.textContent = "Playing response..."
-      })
+    .then(response => {
+      if (response.ok) {
+        response.text().then(html => {
+          Turbo.renderStreamMessage(html)
+          this.statusTarget.textContent = "Message sent."
+        })
+      } else {
+        throw new Error('Network response was not ok')
+      }
+    })
     .catch(error => {
       console.error('Error:', error)
       this.statusTarget.textContent = "Upload failed."

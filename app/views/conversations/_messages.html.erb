@@ -1,0 +1,12 @@
+<div id="conversation-messages">
+  <% conversation.messages.each do |message| %>
+    <div class="message <%= message.role %>">
+      <div class="message-content">
+        <%= message.content %>
+      </div>
+      <div class="message-metadata">
+        <small><%= message.created_at.strftime("%H:%M") %></small>
+      </div>
+    </div>
+  <% end %>
+</div> 
