@@ -56,17 +56,30 @@ export default class extends Controller {
     })
   }
 
-  startRecording() {
-    if (this.mediaRecorder) {
-      this.mediaRecorder.start()
-      this.statusTarget.textContent = "Recording..."
-    }
-  }
-
-  stopRecording() {
-    if (this.mediaRecorder) {
+  async toggleRecording() {
+    if (this.mediaRecorder && this.mediaRecorder.state === "recording") {
       this.mediaRecorder.stop()
-      this.statusTarget.textContent = "Uploading..."
+      this.element.querySelector("button").textContent = "Start Recording"
+      this.statusTarget.textContent = "Recording stopped"
+    } else {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      this.mediaRecorder = new MediaRecorder(stream)
+      
+      this.mediaRecorder.ondataavailable = (event) => {
+        this.audioChunks.push(event.data)
+      }
+
+      this.mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(this.audioChunks, { type: "audio/mp3" })
+        this.uploadAudio(audioBlob)
+        this.audioChunks = []
+        stream.getTracks().forEach(track => track.stop())
+      }
+
+      this.audioChunks = []
+      this.mediaRecorder.start()
+      this.element.querySelector("button").textContent = "Stop Recording"
+      this.statusTarget.textContent = "Recording..."
     }
   }
 }
