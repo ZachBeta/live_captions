@@ -8,6 +8,7 @@ export default class extends Controller {
   static targets = ["status"]
   mediaRecorder = null
   audioChunks = []
+  stream = null
 
   clearSession() { window.location.href = '/' }
 
@@ -17,10 +18,10 @@ export default class extends Controller {
         this.mediaRecorder = new MediaRecorder(stream)
         this.mediaRecorder.ondataavailable = event => {
           this.audioChunks.push(event.data)
+          const audioBlob = new Blob([event.data], { type: 'audio/wav' })
+          this.uploadAudio(audioBlob)
         }
         this.mediaRecorder.onstop = () => {
-          const audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' })
-          this.uploadAudio(audioBlob)
           this.audioChunks = []
         }
       })
@@ -61,25 +62,30 @@ export default class extends Controller {
       this.mediaRecorder.stop()
       this.element.querySelector("button").textContent = "Start Recording"
       this.statusTarget.textContent = "Recording stopped"
+      this.stream.getTracks().forEach(track => track.stop())
     } else {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      this.mediaRecorder = new MediaRecorder(stream)
-      
-      this.mediaRecorder.ondataavailable = (event) => {
-        this.audioChunks.push(event.data)
-      }
-
-      this.mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(this.audioChunks, { type: "audio/mp3" })
-        this.uploadAudio(audioBlob)
+      try {
+        this.stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+        this.mediaRecorder = new MediaRecorder(this.stream)
         this.audioChunks = []
-        stream.getTracks().forEach(track => track.stop())
-      }
+        
+        this.mediaRecorder.ondataavailable = event => {
+          this.audioChunks.push(event.data)
+          const audioBlob = new Blob([event.data], { type: 'audio/wav' })
+          this.uploadAudio(audioBlob)
+        }
+        
+        this.mediaRecorder.onstop = () => {
+          this.audioChunks = []
+        }
 
-      this.audioChunks = []
-      this.mediaRecorder.start()
-      this.element.querySelector("button").textContent = "Stop Recording"
-      this.statusTarget.textContent = "Recording..."
+        this.mediaRecorder.start(5000)
+        this.element.querySelector("button").textContent = "Stop Recording"
+        this.statusTarget.textContent = "Recording..."
+      } catch (error) {
+        console.error("Audio recording error:", error)
+        this.statusTarget.textContent = "Failed to start recording"
+      }
     }
   }
 }

@@ -17,6 +17,8 @@ https://github.com/sublayerapp/rails_llm_voice_chat_example/blob/main/lib/sublay
 * chunk it every 30 seconds with overlaps
 
 # next
+* check out podcast buddy - https://github.com/codenamev/podcast-buddy/blob/main/README.md
+* https://mdn.github.io/dom-examples/media/web-dictaphone/
 
 
 # soon
