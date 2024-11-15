@@ -9,13 +9,13 @@ https://github.com/sublayerapp/rails_llm_voice_chat_example/blob/main/lib/sublay
     * controllers
     * api calls
 * fix github remote branch mismatch
+* do not respond with an LLM call - maybe in v2 to summarize at the end
 
 # now
+* rather than record on button hold - record on button press and stop on press again - confirm
+* chunk it every 30 seconds with overlaps
 
 # next
-* changes needed
-  * do not respond with an LLM call - maybe in v2 to summarize at the end
-  * rather than record on button hold - record on button press and chunk it every 30 seconds with overlaps
 
 
 # soon
