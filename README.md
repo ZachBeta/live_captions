@@ -8,6 +8,7 @@ https://github.com/sublayerapp/rails_llm_voice_chat_example/blob/main/lib/sublay
     * models
     * controllers
     * api calls
+* fix github remote branch mismatch
 
 # now
 
@@ -21,7 +22,6 @@ https://github.com/sublayerapp/rails_llm_voice_chat_example/blob/main/lib/sublay
 * deploy somewhere so it can be shared
   * probably just heroku, mabye someone can help with kamal
 * will words clip?
-* fix github remote branch mismatch
 
 
 # README
