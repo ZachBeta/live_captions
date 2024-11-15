@@ -12,6 +12,7 @@ https://github.com/sublayerapp/rails_llm_voice_chat_example/blob/main/lib/sublay
 * do not respond with an LLM call - maybe in v2 to summarize at the end
 
 # now
+* current recording test is totally off base - maybe whisper isn't good with accents?
 * rather than record on button hold - record on button press and stop on press again - confirm
 * chunk it every 30 seconds with overlaps
 
